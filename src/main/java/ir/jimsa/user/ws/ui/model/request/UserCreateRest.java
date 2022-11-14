@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class UserRest {
+public class UserCreateRest {
     public String name;
     public String family;
     public String email;
