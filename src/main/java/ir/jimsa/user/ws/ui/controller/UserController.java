@@ -6,6 +6,7 @@ import ir.jimsa.user.ws.ui.model.request.UserCreateRest;
 import ir.jimsa.user.ws.ui.model.response.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,7 +20,10 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping(path = "/{userId}", produces = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE
+    })
     public User getUser(@PathVariable String userId) {
         User returnValue = new User();
 
@@ -29,7 +33,10 @@ public class UserController {
         return returnValue;
     }
 
-    @PostMapping
+    @PostMapping(
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
     public User createUser(@RequestBody UserCreateRest newUser) {
         User returnValue = new User();
 
