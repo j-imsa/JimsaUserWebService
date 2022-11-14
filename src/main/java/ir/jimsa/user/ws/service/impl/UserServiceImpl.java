@@ -1,11 +1,13 @@
 package ir.jimsa.user.ws.service.impl;
 
+import ir.jimsa.user.ws.exception.UserServiceException;
 import ir.jimsa.user.ws.io.UserRepository;
 import ir.jimsa.user.ws.io.entity.UserEntity;
 import ir.jimsa.user.ws.service.UserService;
 import ir.jimsa.user.ws.shared.Constants;
 import ir.jimsa.user.ws.shared.Utils;
 import ir.jimsa.user.ws.shared.dto.UserDto;
+import ir.jimsa.user.ws.ui.model.response.ErrorMessages;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -73,6 +75,27 @@ public class UserServiceImpl implements UserService {
         }
         BeanUtils.copyProperties(userEntity, returnValue);
         return returnValue;
+    }
+
+    @Override
+    public UserDto updateUser(UserDto userDto, String userId) {
+
+        UserEntity existUser = userRepository.findUserEntityByUserId(userId);
+
+        if (existUser == null) {
+            throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        }
+
+        existUser.setName(userDto.getName());
+        existUser.setFamily(userDto.getFamily());
+
+        UserEntity updatedUser = userRepository.save(existUser);
+
+        UserDto returnValue = new UserDto();
+        BeanUtils.copyProperties(updatedUser, returnValue);
+
+        return returnValue;
+
     }
 
     @Override

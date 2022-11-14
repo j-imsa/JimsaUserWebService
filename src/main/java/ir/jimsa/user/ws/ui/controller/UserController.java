@@ -26,7 +26,6 @@ public class UserController {
     })
     public User getUser(@PathVariable String userId) {
         User returnValue = new User();
-
         UserDto userDto = userService.getUserByUserId(userId);
         BeanUtils.copyProperties(userDto, returnValue);
 
@@ -48,5 +47,23 @@ public class UserController {
 
         return returnValue;
     }
+
+    @PutMapping(
+            path = "/{userId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    public User updateUser(@PathVariable String userId, @RequestBody UserCreateRest updateUser) {
+        User returnValue = new User();
+
+        UserDto userDto = new UserDto();
+        BeanUtils.copyProperties(updateUser, userDto);
+
+        UserDto updatedUser = userService.updateUser(userDto, userId);
+        BeanUtils.copyProperties(updatedUser, returnValue);
+
+        return returnValue;
+    }
+
 
 }
