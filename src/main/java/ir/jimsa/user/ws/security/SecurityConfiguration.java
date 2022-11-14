@@ -33,7 +33,7 @@ public class SecurityConfiguration {
 //                .cors().and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/users").permitAll()
+                .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .authenticationManager(authenticationManager)
@@ -43,6 +43,7 @@ public class SecurityConfiguration {
 //        http.headers().frameOptions().disable();
 
         http.addFilter(getAuthenticationFilter(authenticationManager));
+        http.addFilter(new AuthorizationFilter(authenticationManager));
 
         return http.build();
     }
