@@ -1,7 +1,7 @@
 package ir.jimsa.user.ws.service.impl;
 
+import ir.jimsa.user.ws.io.UserRepository;
 import ir.jimsa.user.ws.io.entity.UserEntity;
-import ir.jimsa.user.ws.io.entity.UserRepository;
 import ir.jimsa.user.ws.service.UserService;
 import ir.jimsa.user.ws.shared.Constants;
 import ir.jimsa.user.ws.shared.Utils;
@@ -60,6 +60,17 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException(email);
         }
         UserDto returnValue = new UserDto();
+        BeanUtils.copyProperties(userEntity, returnValue);
+        return returnValue;
+    }
+
+    @Override
+    public UserDto getUserByUserId(String userId) {
+        UserDto returnValue = new UserDto();
+        UserEntity userEntity = userRepository.findUserEntityByUserId(userId);
+        if (userEntity == null) {
+            throw new UsernameNotFoundException(userId);
+        }
         BeanUtils.copyProperties(userEntity, returnValue);
         return returnValue;
     }
