@@ -1,7 +1,6 @@
 package ir.jimsa.user.ws.security;
 
 import ir.jimsa.user.ws.service.UserService;
-import ir.jimsa.user.ws.shared.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +35,7 @@ public class WebSecurity {
                 .csrf().disable()
                 .authorizeRequests()
 //                .antMatchers(HttpMethod.POST, Constant.USER_REGISTER_PATH).permitAll()
-                .antMatchers(Constants.USER_REGISTER_PATH).permitAll()
+                .antMatchers(SecurityConstants.SIGN_UP_URL).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .authenticationManager(authenticationManager)
