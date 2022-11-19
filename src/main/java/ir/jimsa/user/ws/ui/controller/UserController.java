@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -21,6 +24,25 @@ public class UserController {
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping(
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    public List<User> getUsers(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "limit", defaultValue = "25") int limit
+    ) {
+
+        List<UserDto> userDtos = userService.getUsers(page, limit);
+
+        return userDtos.stream()
+                .map(userDto -> {
+                    User user = new User();
+                    BeanUtils.copyProperties(userDto, user);
+                    return user;
+                })
+                .collect(Collectors.toList());
     }
 
     @GetMapping(path = "/{userId}", produces = {
